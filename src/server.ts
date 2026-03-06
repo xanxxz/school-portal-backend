@@ -53,13 +53,14 @@ app.post('/api/news', async (req, res) => {
   if (!title || !description || !category) return res.status(400).json({ message: 'Все поля обязательны' });
 
   try {
-    await pool.query(
+    const result = await pool.query(
       `INSERT INTO news (title, description, category, "imageUrl", date)
-       VALUES ($1, $2, $3::text[], $4, NOW())`,
+       VALUES ($1, $2, $3::text[], $4, NOW())
+       RETURNING id, title, description, category, "imageUrl", date`,
       [title, description, category, imageUrl || null]
     );
 
-    res.status(200).json({ message: 'Новость добавлена' });
+    res.status(200).json(result.rows[0]); // возвращаем объект новости
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Ошибка сервера' });
@@ -103,13 +104,14 @@ app.post('/api/teachers', async (req, res) => {
   if (!name || !position) return res.status(400).json({ message: 'Имя и должность обязательны' });
 
   try {
-    await pool.query(
+    const result = await pool.query(
       `INSERT INTO teacher (name, position, bio, "photoUrl", subjects)
-       VALUES ($1, $2, $3, $4, $5::text[])`,
+       VALUES ($1, $2, $3, $4, $5::text[])
+       RETURNING id, name, position, bio, "photoUrl", subjects`,
       [name, position, bio || null, photoUrl || null, subjects || []]
     );
 
-    res.status(200).json({ message: 'Преподаватель добавлен' });
+    res.status(200).json(result.rows[0]); // возвращаем объект преподавателя
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Ошибка сервера' });
