@@ -37,3 +37,9 @@ CREATE TABLE feedback (
   message TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE admin (
+  id SERIAL PRIMARY KEY,
+  login TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
+);
