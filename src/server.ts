@@ -4,7 +4,7 @@ import cors from 'cors';
 import { Pool } from 'pg';
 
 const app = express();
-const PORT = Number(process.env.PORT) || 4000;
+const PORT = Number(process.env.PORT) || 3000;
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
